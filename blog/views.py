@@ -16,6 +16,15 @@ from django.shortcuts import get_object_or_404
 from .models import Comment, Category
 from .forms import CommentForm
 
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
+
+class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff
+
 
 # READ - Listagem de posts
 class PostListView(ListView):
@@ -32,7 +41,7 @@ class PostDetailView(DetailView):
 
 
 # CREATE - Criar post
-class PostCreateView(CreateView):
+class PostCreateView(StaffRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
@@ -45,7 +54,7 @@ class PostCreateView(CreateView):
 
 
 # UPDATE - Editar post
-class PostUpdateView(UpdateView):
+class PostUpdateView(StaffRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
@@ -59,7 +68,7 @@ class PostUpdateView(UpdateView):
 
 
 # DELETE - Excluir post
-class PostDeleteView(DeleteView):
+class PostDeleteView(StaffRequiredMixin, DeleteView):
     model = Post
     template_name = 'blog/post_delete.html'
     context_object_name = 'post'
