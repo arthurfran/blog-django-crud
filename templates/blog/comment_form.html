@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Comentar postagem</h2>
+
+<p>{{ post.title }}</p>
+
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+
+  <button type="submit">Publicar comentário</button>
+</form>
+
+<a href="{% url 'blog:post_detail' post.pk %}"> Cancelar </a>
+
+{% endblock %}

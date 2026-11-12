@@ -12,6 +12,21 @@
         <a href="{% url 'blog:post_list' %}"> Página inicial </a>
 
         <a href="{% url 'blog:post_create' %}"> Nova postagem </a>
+
+        {% if user.is_authenticated %}
+
+        <span>Usuário: {{ user.username }}</span>
+
+        <form method="post" action="{% url 'blog:logout' %}">
+          {% csrf_token %}
+          <button type="submit">Sair</button>
+        </form>
+
+        {% else %}
+
+        <a href="{% url 'blog:login' %}">Entrar</a>
+
+        {% endif %}
       </nav>
     </header>
 

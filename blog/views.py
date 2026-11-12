@@ -10,6 +10,11 @@ from django.urls import reverse, reverse_lazy
 
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
+
+from .models import Comment
+from .forms import CommentForm
 
 
 # READ - Listagem de posts
@@ -59,3 +64,30 @@ class PostDeleteView(DeleteView):
     template_name = 'blog/post_delete.html'
     context_object_name = 'post'
     success_url = reverse_lazy('blog:post_list')
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = get_object_or_404(
+            Post, pk=self.kwargs['pk']
+        )
+        return context
+
+    def form_valid(self, form):
+        form.instance.post = get_object_or_404(
+            Post, pk=self.kwargs['pk']
+        )
+        form.instance.author = self.request.user
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            'blog:post_detail',
+            kwargs={'pk': self.kwargs['pk']}
+        )
