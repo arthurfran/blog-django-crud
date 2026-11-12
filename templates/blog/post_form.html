@@ -1,15 +1,29 @@
-{% extends 'base.html' %} {% block content %} {% if post %}
-<h2>Editar postagem</h2>
-{% else %}
-<h2>Criar nova postagem</h2>
-{% endif %}
-
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-
-  <button type="submit">
-    {% if post %} Atualizar postagem {% else %} Salvar postagem {% endif %}
-  </button>
-</form>
-
+{% extends 'base.html' %}
+{% block title %}{% if post %}Editar postagem{% else %}Nova postagem{% endif %}{% endblock %}
+{% block content %}
+<section class="form-panel">
+    <span class="eyebrow">EDITOR DO BLOG</span>
+    {% if post %}
+        <h1>Editar postagem</h1>
+        <p>Atualize o título ou o conteúdo da publicação.</p>
+    {% else %}
+        <h1>Nova postagem</h1>
+        <p>Crie uma publicação para compartilhar com os leitores.</p>
+    {% endif %}
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button class="button button-primary" type="submit">
+                {% if post %}Salvar alterações{% else %}Publicar postagem{% endif %}
+            </button>
+            {% if post %}
+                <a class="button button-outline" href="{% url 'blog:post_detail' post.pk %}">Cancelar</a>
+            {% else %}
+                <a class="button button-outline" href="{% url 'blog:post_list' %}">Cancelar</a>
+            {% endif %}
+        </div>
+    </form>
+    <p class="form-hint">O conteúdo HTML deve ser confiável: ele será renderizado na página da postagem.</p>
+</section>
 {% endblock %}

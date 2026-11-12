@@ -1,13 +1,18 @@
-{% extends 'base.html' %} {% block content %}
-
-<h2>Entrar</h2>
-
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-
-  <input type="hidden" name="next" value="{{ next }}" />
-
-  <button type="submit">Entrar</button>
-</form>
-
+{% extends 'base.html' %}
+{% block title %}Entrar{% endblock %}
+{% block content %}
+<section class="form-panel compact-form">
+    <span class="eyebrow">SUA CONTA</span>
+    <h1>Entrar no blog</h1>
+    <p>Entre para comentar as publicações.</p>
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="form-actions">
+            <button class="button button-primary" type="submit">Entrar</button>
+            <a class="button button-outline" href="{% url 'blog:post_list' %}">Voltar</a>
+        </div>
+    </form>
+</section>
 {% endblock %}

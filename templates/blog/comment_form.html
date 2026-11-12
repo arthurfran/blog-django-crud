@@ -1,15 +1,17 @@
-{% extends 'base.html' %} {% block content %}
-
-<h2>Comentar postagem</h2>
-
-<p>{{ post.title }}</p>
-
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-
-  <button type="submit">Publicar comentário</button>
-</form>
-
-<a href="{% url 'blog:post_detail' post.pk %}"> Cancelar </a>
-
+{% extends 'base.html' %}
+{% block title %}Comentar{% endblock %}
+{% block content %}
+<section class="form-panel">
+    <span class="eyebrow">PARTICIPE DA CONVERSA</span>
+    <h1>Adicionar comentário</h1>
+    <p>Respondendo à publicação: <strong>{{ post.title }}</strong></p>
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button class="button button-primary" type="submit">Publicar comentário</button>
+            <a class="button button-outline" href="{% url 'blog:post_detail' post.pk %}">Cancelar</a>
+        </div>
+    </form>
+</section>
 {% endblock %}

@@ -1,20 +1,16 @@
-{% extends 'base.html' %} {% block content %}
-
-<h2>Confirmar exclusão</h2>
-
-<p>
-  Deseja realmente excluir a postagem
-  <strong>{{ post.title }}</strong>?
-</p>
-
-<form method="post">
-  {% csrf_token %}
-
-  <button type="submit">Sim, excluir postagem</button>
-</form>
-
-<p>
-  <a href="{% url 'blog:post_detail' post.pk %}"> Cancelar </a>
-</p>
-
+{% extends 'base.html' %}
+{% block title %}Excluir postagem{% endblock %}
+{% block content %}
+<section class="form-panel danger-panel">
+    <span class="eyebrow">CONFIRMAÇÃO NECESSÁRIA</span>
+    <h1>Excluir postagem?</h1>
+    <p>Você está prestes a excluir <strong>{{ post.title }}</strong>. Essa ação não pode ser desfeita.</p>
+    <form method="post" class="styled-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button class="button button-danger" type="submit">Sim, excluir</button>
+            <a class="button button-outline" href="{% url 'blog:post_detail' post.pk %}">Cancelar</a>
+        </div>
+    </form>
+</section>
 {% endblock %}

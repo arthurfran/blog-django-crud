@@ -1,18 +1,39 @@
-{% extends 'base.html' %} {% block content %} {% if category %}
-<h2>Categoria: {{ category.name }}</h2>
-<p>{{ category.description }}</p>
-{% else %}
-<h2>Postagens</h2>
-{% endif %} {% for post in posts %}
+{% extends 'base.html' %}
+{% block title %}{% if category %}{{ category.name }}{% else %}Postagens{% endif %}{% endblock %}
+{% block content %}
+<section class="page-intro">
+    <span class="eyebrow">CONTEÚDO EM DESTAQUE</span>
+    {% if category %}
+        <h1>{{ category.name }}</h1>
+        <p>{{ category.description }}</p>
+        <a class="text-link" href="{% url 'blog:category_list' %}">← Todas as categorias</a>
+    {% else %}
+        <h1>Ideias, histórias e descobertas.</h1>
+        <p>Explore as últimas publicações do blog e compartilhe suas opiniões nos comentários.</p>
+    {% endif %}
+</section>
 
-<h3>
-  <a href="{% url 'blog:post_detail' post.pk %}"> {{ post.title }} </a>
-</h3>
-
-<p>Publicado em: {{ post.created_at|date:"d/m/Y H:i" }}</p>
-
-{% empty %}
-
-<p>Nenhuma postagem encontrada.</p>
-
-{% endfor %} {% endblock %}
+<section class="card-grid" aria-label="Postagens">
+    {% for post in posts %}
+        <article class="post-card">
+            <div class="post-card-top">
+                <span class="meta">{{ post.created_at|date:"d/m/Y" }}</span>
+                <span class="meta">{{ post.comments.count }} comentário{{ post.comments.count|pluralize }}</span>
+            </div>
+            <h2><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a></h2>
+            <p class="post-excerpt">{{ post.content|striptags|truncatechars:160 }}</p>
+            <div class="chip-group">
+                {% for item in post.categories.all %}
+                    <a class="chip" href="{% url 'blog:category_detail' item.pk %}">{{ item.name }}</a>
+                {% endfor %}
+            </div>
+            <a class="text-link card-read" href="{% url 'blog:post_detail' post.pk %}">Ler publicação →</a>
+        </article>
+    {% empty %}
+        <div class="empty-state">
+            <h2>Nenhuma postagem por enquanto</h2>
+            <p>Volte em breve para conferir novos conteúdos.</p>
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}
