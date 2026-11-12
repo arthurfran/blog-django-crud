@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
+from .forms import PostForm
 
 
 def post_list(request):
@@ -24,36 +25,37 @@ def post_detail(request, pk):
 
 def post_create(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
+        form = PostForm(request.POST)
 
-        post = Post.objects.create(
-            title=title,
-            content=content
-        )
+        if form.is_valid():
+            post = form.save()
+            return redirect('blog:post_detail', pk=post.pk)
+    else:
+        form = PostForm()
 
-        return redirect('blog:post_detail', pk=post.pk)
-
-    return render(request, 'blog/post_form.html')
-
+    return render(
+        request,
+        'blog/post_form.html',
+        {'form': form}
+    )
 
 def post_update(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
     if request.method == 'POST':
-        post.title = request.POST.get('title')
-        post.content = request.POST.get('content')
+        form = PostForm(request.POST, instance=post)
 
-        post.save()
-
-        return redirect('blog:post_detail', pk=post.pk)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
 
     return render(
         request,
         'blog/post_form.html',
-        {'post': post}
+        {'form': form, 'post': post}
     )
-
 
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
