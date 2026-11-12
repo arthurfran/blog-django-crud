@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Confirmar exclusão</h2>
+
+<p>
+  Deseja realmente excluir a postagem
+  <strong>{{ post.title }}</strong>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <button type="submit">Sim, excluir postagem</button>
+</form>
+
+<p>
+  <a href="{% url 'blog:post_detail' post.pk %}"> Cancelar </a>
+</p>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %} {% if post %}
+<h2>Editar postagem</h2>
+{% else %}
+<h2>Criar nova postagem</h2>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+
+  <label for="title">Título:</label>
+  <input
+    type="text"
+    name="title"
+    id="title"
+    value="{{ post.title|default:'' }}"
+  />
+
+  <br /><br />
+
+  <label for="content">Conteúdo HTML:</label>
+  <textarea name="content" id="content" rows="10" cols="50">
+{{ post.content|default:'' }}</textarea
+  >
+
+  <br /><br />
+
+  <button type="submit">
+    {% if post %} Atualizar postagem {% else %} Salvar postagem {% endif %}
+  </button>
+</form>
+
+{% endblock %}
