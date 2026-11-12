@@ -13,7 +13,7 @@ from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
-from .models import Comment
+from .models import Comment, Category
 from .forms import CommentForm
 
 
@@ -91,3 +91,21 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
             'blog:post_detail',
             kwargs={'pk': self.kwargs['pk']}
         )
+
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'blog/category_list.html'
+    context_object_name = 'categories'
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'blog/post_list.html'
+    context_object_name = 'category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = self.object.posts.all()
+        return context

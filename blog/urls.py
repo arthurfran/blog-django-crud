@@ -53,4 +53,15 @@ path(
     LogoutView.as_view(next_page='blog:post_list'),
     name='logout'
 ),
+path(
+    'categorias/',
+    views.CategoryListView.as_view(),
+    name='category_list'
+),
+
+path(
+    'categorias/<int:pk>/',
+    views.CategoryDetailView.as_view(),
+    name='category_detail'
+),
 ]

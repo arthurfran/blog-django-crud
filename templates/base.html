@@ -13,6 +13,8 @@
 
         <a href="{% url 'blog:post_create' %}"> Nova postagem </a>
 
+        <a href="{% url 'blog:category_list' %}"> Categorias </a>
+
         {% if user.is_authenticated %}
 
         <span>Usuário: {{ user.username }}</span>

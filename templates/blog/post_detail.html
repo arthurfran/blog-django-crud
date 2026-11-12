@@ -8,6 +8,18 @@
 
 <hr />
 
+<h3>Categorias</h3>
+
+{% for category in post.categories.all %}
+
+<a href="{% url 'blog:category_detail' category.pk %}"> {{ category.name }} </a>
+
+{% empty %}
+
+<p>Esta postagem não possui categorias.</p>
+
+{% endfor %}
+
 <h3>Comentários</h3>
 
 {% for comment in post.comments.all %}

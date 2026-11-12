@@ -1,8 +1,9 @@
-{% extends 'base.html' %} {% block content %}
-
+{% extends 'base.html' %} {% block content %} {% if category %}
+<h2>Categoria: {{ category.name }}</h2>
+<p>{{ category.description }}</p>
+{% else %}
 <h2>Postagens</h2>
-
-{% for post in posts %}
+{% endif %} {% for post in posts %}
 
 <h3>
   <a href="{% url 'blog:post_detail' post.pk %}"> {{ post.title }} </a>
@@ -11,5 +12,7 @@
 <p>Publicado em: {{ post.created_at|date:"d/m/Y H:i" }}</p>
 
 {% empty %}
-<p>Nenhuma postagem cadastrada.</p>
+
+<p>Nenhuma postagem encontrada.</p>
+
 {% endfor %} {% endblock %}
